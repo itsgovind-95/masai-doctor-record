@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Masai Doctor Records</title>
+  <style>
+    h2 {
+      text-align: center;
+      text-decoration: underline;
+      color: #0468aa;
+    }
+
+    div {
+      display: flex;
+      justify-content: space-around;
+    }
+
+    form {
+      margin: 0 auto;
+      margin-top: 50px;
+      width: 30%;
+      box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+      padding: 30px;
+    }
+
+    label {
+      font-size: 20px;
+    }
+
+    table {
+      font-family: Arial, Helvetica, sans-serif;
+      border-collapse: collapse;
+      width: 60%;
+      margin-top: 50px;
+      text-align: center;
+    }
+
+    table td, table th {
+      border: 1px solid #add;
+      padding: 8px;
+      text-align: center;
+    }
+
+    table tr:nth-child(even) {
+      background-color: #8caacf;
+    }
+
+    table tr:hover {
+      background-color: #add;
+    }
+
+    table th {
+      padding-top: 12px;
+      padding-bottom: 12px;
+      text-align: left;
+      background-color: #0468aa;
+      color: white;
+      text-align: center;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    input, select, textarea {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      box-sizing: border-box;
+      margin-top: 6px;
+      margin-bottom: 16px;
+      resize: vertical;
+    }
+
+    input[type="submit"] {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #ccc;
+      border-radius: 20px;
+      box-sizing: border-box;
+      margin-top: 6px;
+      margin-bottom: 16px;
+      resize: vertical;
+      background-color: blue;
+      color: white;
+      cursor: pointer;
+    }
+
+    input[type="submit"]:hover {
+      background-color: #3973b6;
+    }
+
+    #specialization {
+      background-color: white;
+      color: black;
+    }
+
+    h1 {
+      text-align: center;
+      font-size: 50px;
+      text-transform: uppercase;
+      font-family: monospace;
+      color: #2b619e;
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <h2>HOSPITAL - DOCTOR RECORDS</h2>
+  <div>
+    <!-- Use this form for data input  -->
+    <form id="form">
+      <label for="name">Doctor Name</label>
+      <input type="text" id="name" placeholder="Name" required>
+
+      <label for="doctor_id">Doctor ID</label>
+      <input type="text" id="doctor_id" placeholder="Doctor ID" required>
+
+      <label for="specialization">Specialization</label>
+      <select id="specialization" required>
+        <option value="">Select Specialization</option>
+        <option value="Dermatologist">Dermatologist</option>
+        <option value="Dentist">Dentist</option>
+        <option value="Gynecologist">Gynecologist</option>
+      </select>
+
+      <label for="experience">Experience</label>
+      <input type="number" id="experience" placeholder="Experience" required>
+
+      <label for="email">Email Address</label>
+      <input type="email" id="email" placeholder="Email" required>
+
+      <label for="mobile">Mobile Number</label>
+      <input type="number" id="mobile" placeholder="Mobile No." required>
+
+      <input type="submit" value="Submit">
+    </form>
+
+    <!-- Use this Select tag for filter part  -->
+    <!-- <select id="filter">
+      <option value="">Select Specialization</option>
+      <option value="Dermatologist">Dermatologist</option>
+      <option value="Dentist">Dentist</option>
+      <option value="Gynecologist">Gynecologist</option>
+    </select> -->
+
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Doctor ID</th>
+          <th>Specialization</th>
+          <th>Experience in Years</th>
+          <th>Email</th>
+          <th>Mobile No</th>
+          <th>Role</th>
+          <th>Delete</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Append Rows here using JS & DOM  -->
+      </tbody>
+    </table>
+  </div>
+
+  <script>
+    document.querySelector('#form').addEventListener('submit', addDoctor);
+    let total = 0;
+
+    function addDoctor(event) {
+      event.preventDefault();
+      const name = document.querySelector('#name').value;
+      const doctorId = document.querySelector('#doctor_id').value;
+      const specialization = document.querySelector('#specialization').value;
+      const experience = document.querySelector('#experience').value;
+      const email = document.querySelector('#email').value;
+      const mobile = document.querySelector('#mobile').value;
+
+      const doctorObj = {
+        Name: name,
+        DoctorId: doctorId,
+        Specialization: specialization,
+        Experience: experience,
+        Email: email,
+        Mobile: mobile,
+      };
+
+      displayTable(doctorObj);
+      total++;
+      document.querySelector('#total-doctor').innerText = total;
+    }
+
+    function displayTable(doctorObj) {
+      const tr = document.createElement('tr');
+      const td1 = createTableCell(doctorObj.Name);
+      const td2 = createTableCell(doctorObj.DoctorId);
+      const td3 = createTableCell(doctorObj.Specialization);
+      const td4 = createTableCell(doctorObj.Experience);
+      const td5 = createTableCell(doctorObj.Email);
+      const td6 = createTableCell(doctorObj.Mobile);
+      const td7 = createTableCell(getDoctorRole(doctorObj.Experience));
+      const td8 = createDeleteButton();
+
+      tr.append(td1, td2, td3, td4, td5, td6, td7, td8);
+      document.querySelector('tbody').append(tr);
+    }
+
+    function createTableCell(value) {
+      const td = document.createElement('td');
+      td.innerText = value;
+      return td;
+    }
+
+    function createDeleteButton() {
+      const td = document.createElement('td');
+      const button = document.createElement('button');
+      button.innerText = 'Delete';
+      button.addEventListener('click', deleteRow);
+      button.style.backgroundColor = 'red';
+      td.append(button);
+      return td;
+    }
+
+    function deleteRow() {
+      event.target.parentNode.parentNode.remove();
+      total--;
+      document.querySelector('#total-doctor').innerText = total;
+    }
+
+    function getDoctorRole(experience) {
+      if (experience > 5) {
+        return 'Senior';
+      } else if (experience >= 2 && experience <= 5) {
+        return 'Junior';
+      } else {
+        return 'Trainee';
+      }
+    }
+
+    //Filter doctors based on specialization
+    // document.getElementById('filter').addEventListener('change', function () {
+    //   const filterValue = this.value.toLowerCase();
+    //   const rows = document.querySelector('tbody').getElementsByTagName('tr');
+
+    //   for (let i = 0; i < rows.length; i++) {
+    //     const specialization = rows[i].getElementsByTagName('td')[2];
+    //     if (specialization) {
+    //       const textValue = specialization.textContent || specialization.innerText;
+    //       rows[i].style.display = textValue.toLowerCase().includes(filterValue) ? '' : 'none';
+    //     }
+    //   }
+    // });
+  </script>
+</body>
+</html>
